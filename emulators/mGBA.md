@@ -11,7 +11,7 @@
 - Also: [Link] (https://github.com/SiD3W4y/GhidraGBA GhidraGBA)
 - The sites above describe how to install a GBA loader extension for Ghidra and use it to analyze a target ROM.
 - To launch your target: `mgba --gdb /Path/to/target.gba` (should launch stopped/waiting for a connection).
-- From the Ghidra toolbar, "Configure and launch target.gba using..."->"remote lldb".
+- From the Ghidra toolbar, `Configure and launch target.gba using...->remote lldb`.
 ```
 Host: localhost
 Port: 2345
@@ -47,4 +47,4 @@ error: Assertion failed:....
 
 ## Errors:
 - If you're seeing the "Assertion failed" error, there's no current workaround. It has no affect on execution (other than flooding the terminal window in an annoying way on every step).
-- Static/dynamic listings unsynced: use "Modules"->"Map the current trace to the current program using identical addresses" (<=>) or equivalent.
+- Static/dynamic listings unsynced: use `Modules->Map the current trace to the current program using identical addresses (<=>)` or equivalent.
