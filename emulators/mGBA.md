@@ -10,13 +10,15 @@
 - Recommended reading: [Link] (https://wrongbaud.github.io/posts/ghidra-debugger/ A first look at Ghidra's Debugger - Game Boy Advance Edition)
 - Also: [Link] (https://github.com/SiD3W4y/GhidraGBA GhidraGBA)
 - The sites above describe how to install a GBA loader extension for Ghidra and use it to analyze a target ROM.
-- To launch your target: mgba --gdb /Path/to/target.gba (should launch stopped/waiting for a connection).
+- To launch your target: `mgba --gdb /Path/to/target.gba` (should launch stopped/waiting for a connection).
 - From the Ghidra toolbar, "Configure and launch target.gba using..."->"remote lldb".
--- Host: localhost
--- Port: 2345
--- Architecture: [empty]
--- lldb command: lldb 
-- Launch
+```
+Host: localhost
+Port: 2345
+Architecture: [empty]
+lldb command: lldb 
+```
+- `Launch`
 
 ## Terminal Output:
 
