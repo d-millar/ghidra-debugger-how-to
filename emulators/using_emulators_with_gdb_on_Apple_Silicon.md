@@ -76,9 +76,21 @@ ssh "-R$OPT_REMOTE_PORT:$GHIDRA_TRACE_RMI_ADDR" -R 2345:localhost:2345 -t $OPT_E
   -ex '$OPT_START_CMD' \
 ```
 - add the commands:
-```  -ex 'set arch armv4t' \``` say, after ```set confirm off```
+```
+  -ex 'set arch armv4t' \
+``` 
+say, after 
+```
+set confirm off
+```
 and
-```  -ex 'target remote :2345' \``` after ```  -ex 'python import ghidragdb' \```
+```
+  -ex 'target remote :2345' \
+``` 
+after
+```
+  -ex 'python import ghidragdb' \
+```
 
 Depending on the emulator, you'll probably need to do one or more of the following after launching:
 - From Modules, `Modules->Map the current trace to the current program using identical addresses (<=>)` or equivalent.
