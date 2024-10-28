@@ -4,7 +4,7 @@ Option one is, of course, use lldb.  This may or may not work, and/or may or may
 
 To do this, you'll need to:
 - ssh into your running Linux VM (both to insure things are installed and make sure ssh is set up correctly)
-- `apt install gdb-multiarch'
+- `apt install gdb-multiarch`
 - verity the version of python used inside of gdb-multiarch (e.g. `pi`->`import sys`->`sys.version`)
 - assuming that version is the default in your shell, `python3 -m pip install ghidratrace` & `python3 -m pip install ghidragdb`
 - if needed, `python3 -m pip install psutil`
@@ -64,7 +64,7 @@ You'll want to modify the shell, the command line args, and a few of the gdb com
 - add an argument reflecting the emulator's gdb port to the Linux VM, e.g.
 ```
 ssh "-R$OPT_REMOTE_PORT:$GHIDRA_TRACE_RMI_ADDR" -t $OPT_EXTRA_SSH_ARGS "$OPT_HOST" "TERM='$TERM' '$OPT_GDB_PATH' \
-``
+```
 could be changed to 
 ```
 ssh "-R$OPT_REMOTE_PORT:$GHIDRA_TRACE_RMI_ADDR" -R 2345:localhost:2345 -t $OPT_EXTRA_SSH_ARGS "$OPT_HOST" "TERM='$TERM' '$OPT_GDB_PATH' \
