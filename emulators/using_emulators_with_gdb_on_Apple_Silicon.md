@@ -1,6 +1,6 @@
-# How to debug emulators with gdbstub on Apple Silicon / aarch64 macos
+# How to debug an emulator with a gdbstub on aarch64 macos
 
-Option one is, of course, use lldb.  This may or may not work, and/or may or may not be in your comfort zone.  Given the current difficulties involved building gdb, esp. gdb-multiarch, on Apple Silicon, building and using gdb-multiarch directly may not be an option.  If, however, you have a running Linux VM, for example in VMware or QEMU, you have an alternative.  The basic is to modify the gdb-over-ssh shell to circle back to an emulator running natively on macos.
+Option one is, of course, use lldb.  This may or may not work, and/or may or may not be in your comfort zone.  Given the current difficulties involved building gdb, esp. gdb-multiarch, on Apple Silicon, using gdb-multiarch directly may not be an option.  If, however, you have a running Linux VM, for example in VMware or QEMU, you have an alternative.  The basic idea is to modify the gdb-over-ssh shell to circle back to an emulator running natively on macos.
 
 To do this, you'll need to:
 - ssh into your running Linux VM (both to insure things are installed and make sure ssh is set up correctly)
