@@ -7,12 +7,12 @@
 
 ## Set-up
 
-- Recommended reading: (https://pcsx-redux.consoledev.net/Debugging/ghidra Connecting PCSX-Redux to Ghidra)
-- Also: [Link] (https://github.com/NationalSecurityAgency/ghidra/issues/3169 Debugger not working for bare mips target. #3169)
+- Recommended reading: "Connecting PCSX-Redux to Ghidra" (https://pcsx-redux.consoledev.net/Debugging/ghidra)
+- Also: "Debugger not working for bare mips target. #3169" (https://github.com/NationalSecurityAgency/ghidra/issues/3169)
 - The first site provides the developer's guidance on running the emulator; the second, some historical issues.
 - To launch your target: 
--- Configure the PCSX-Redux with `Emulation Configuration -> Enable Debugger & Enable GDB Server`
--- Load your target game: `File -> Open Disk Image...'
+	- Configure the PCSX-Redux with `Emulation Configuration -> Enable Debugger & Enable GDB Server`
+	- Load your target game: `File -> Open Disk Image...'
 - From the Ghidra toolbar, `Configure and launch target.gba using...->remote gdb` 
 ```
 Host: localhost
