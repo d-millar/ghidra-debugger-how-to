@@ -13,7 +13,7 @@
 - To launch your target: 
 	- Configure the PCSX-Redux with `Emulation Configuration -> Enable Debugger & Enable GDB Server`
 	- Load your target game: `File -> Open Disk Image...`
-- From the Ghidra toolbar, `Configure and launch target.gba using... -> remote gdb` 
+- From the Ghidra toolbar, `Configure and launch openbios.bin|target.cue using... -> remote gdb` 
 ```
 Host: localhost
 Port: 3333
