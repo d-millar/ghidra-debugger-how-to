@@ -12,17 +12,17 @@
 - The first site provides the developer's guidance on running the emulator; the second, some historical issues.
 - To launch your target: 
 	- Configure the PCSX-Redux with `Emulation Configuration -> Enable Debugger & Enable GDB Server`
-	- Load your target game: `File -> Open Disk Image...'
-- From the Ghidra toolbar, `Configure and launch target.gba using...->remote gdb` 
+	- Load your target game: `File -> Open Disk Image...`
+- From the Ghidra toolbar, `Configure and launch target.gba using... -> remote gdb` 
 ```
 Host: localhost
 Port: 3333
 Architecture: mips:3000
 lldb command: gdb-multiarch 
 ```
-- `Launch`
-= From the terminal, `stepi` to get the target to break.
 (or follow the instructions in `using_emulators_with_gdb_on_Apple_Silicon.md`)
+- `Launch`
+- From the terminal, `stepi` to get the target to break.
 - From Regions, use `Force Full View` to populate the Dynamic Listing.
 - From Static Mappings, use `Add Mappings from Listing Selections` to coordinate the Static and Dynamic Listing views.
 
