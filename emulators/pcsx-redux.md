@@ -1,14 +1,14 @@
 # PCSX-Redux
 
 ## Context
-- OS: macos 
+- OS: macos arm
 - debugger: gdb-multiarch
 - target: PCSX-Redux
 
 ## Set-up
 
-- Recommended reading: "Connecting PCSX-Redux to Ghidra" (https://pcsx-redux.consoledev.net/Debugging/ghidra)
-- Also: "Debugger not working for bare mips target. #3169" (https://github.com/NationalSecurityAgency/ghidra/issues/3169)
+- Recommended reading: **Connecting PCSX-Redux to Ghidra** (https://pcsx-redux.consoledev.net/Debugging/ghidra)
+- Also: **Debugger not working for bare mips target. #3169** (https://github.com/NationalSecurityAgency/ghidra/issues/3169)
 - The first site provides the developer's guidance on running the emulator; the second, some historical issues.
 - To launch your target: 
 	- Configure the PCSX-Redux with `Emulation Configuration -> Enable Debugger & Enable GDB Server`
