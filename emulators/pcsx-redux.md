@@ -46,4 +46,4 @@ warning: GDB can't find the start of the function at 0x80062f3c.
 - If you see sign-extended addresses, particularly in the Dynamic Listing, Ghidra has failed to identify your language spec. This can be fixed by either modifying the tables in ghidragdb/arch.py and re-compiling (easier for source than distributions) or forcing the target language: 
 	- `Debugger->Choose Platform->More...`
 	- uncheck `Show Only Recommended Offers`
-	- select your bast match.
+	- select your best match
