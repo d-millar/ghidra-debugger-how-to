@@ -20,7 +20,7 @@ Architecture: i386
 lldb command: lldb
 ```
 or 
-`gdb via ssh and back` (with `target remote :2345` inlined
+`gdb via ssh and back` (with `target remote :2345` inlined)
 ```
 Image: 
 Arguments:
