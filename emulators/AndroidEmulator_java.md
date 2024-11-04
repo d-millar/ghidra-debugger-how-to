@@ -16,7 +16,7 @@
 	- `adb forward tcp:54321 jdwp:pid`
 - From the Ghidra toolbar, `Configure and launch target using... -> java attach port` 
 ```
-Arch: Dalvikk
+Arch: Dalvik
 Host: localhost
 Port: 54321
 Timeout: 0
