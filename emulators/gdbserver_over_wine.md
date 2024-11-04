@@ -75,4 +75,4 @@ Connected to Ghidra 11.3 at localhost:12345
 ```
 
 ## Errors:
-- For reasons I don't completely understand, ctrl-c (or `interrupt` or `process interrupt`) has no affect for targets running under a wine-emulated gdbserver.  `Kill -INT pid` (suggested in `https://github.com/NationalSecurityAgency/ghidra/issues/6075`) will work, but the failure, for better or worse, is not a function of having Ghidra in the mix.
+- For reasons I don't completely understand, ctrl-c (or `interrupt` or `process interrupt`) has no affect for targets running under a wine-emulated gdbserver.  `Kill -INT pid` (suggested in `https://github.com/NationalSecurityAgency/ghidra/issues/6075`) will work.  The failure of the normal break mechanisms, for better or worse, is not a function of having Ghidra in the mix.
