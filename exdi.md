@@ -1,15 +1,16 @@
 # eXDI
 
 ## Context
-- OS: macos x64
-- debugger: windbg over Remote Serial Protocol
-- target: Windows kernel
+- OS: macos x64 with two Windows 11 VMware VMs
+- debugger: windbg over Remote Serial Protocol (in one VM)
+- target: Windows kernel (second VM, booted with "bcdedit /debug on")
 
 ## Set-up
 
 - Recommended reading: **Configuring the EXDI Debugger Transport** (https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/configuring-the-exdi-debugger-transport)
 - Also: **Setting Up QEMU Kernel-Mode Debugging Using EXDI** (https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/setting-up-qemu-kernel-mode-debugging-using-exdi)
-- The sites above describe how to use the eXDI mode in windbg proper.
+- The sites above describe how to use the eXDI mode in windbg proper. In the same vein, I'm using Ghidra in one
+  VM to access the dbgeng/dbgmodel API and connect to a second VM, optionally booted in debug mode.
 - From the Ghidra toolbar, `Configure and launch <anything> using...->dbgeng-kernel`.
 ```
 Python command: py (typically)
