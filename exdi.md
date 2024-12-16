@@ -20,7 +20,7 @@ Use dbgmodel: either, but dbgmodel is better
 Path to dbgeng.dll directory: C:\Program Files (x86)\Windows Kits\10\Debuggers\x64 (typically)
 ```
 - `Launch`
-- at the "Launch Failed" timeout dialog, choose "Keep"
+- at the`Launch Failed` timeout dialog, choose `Keep`
 
 ## Terminal Output:
 
@@ -29,8 +29,7 @@ Connected to Ghidra 11.3 at 127.0.0.1:53328
 ConfigFile: C:\Users\llero\Desktop\exdiConfigData.xml
 RegMapFile: C:\Users\llero\Desktop\systemregisters.xml
 
-************* Preparing the environment for Debugger Extensions Galler
-y repositories **************
+************* Preparing the environment for Debugger Extensions Gallery repositories **************
    ExtensionRepository : Implicit
    UseExperimentalFeatureForNugetShare : true
    AllowNugetExeUpdate : true
@@ -44,14 +43,13 @@ y repositories **************
       ----> Repository : LocalInstalled, Enabled: true
       ----> Repository : UserExtensions, Enabled: true
 
->>>>>>>>>>>>> Preparing the environment for Debugger Extensions Galler
-y repositories completed, duration 0.015 seconds
+>>>>>>>>>>>>> Preparing the environment for Debugger Extensions Gallery repositories completed, duration 0.015 seconds
 
 ************* Waiting for Debugger Extensions Gallery to Initialize **************
 
 >>>>>>>>>>>>> Waiting for Debugger Extensions Gallery to Initialize completed, duration 0.297 seconds
-   ----> Repository : UserExtensions, Enabled: true, Packages count: 0   ----> Repository : LocalInstalled, Enable
-d: true, Packages count: 29
+   ----> Repository : UserExtensions, Enabled: true, Packages count: 0
+   ----> Repository : LocalInstalled, Enabled: true, Packages count: 29
 
 Microsoft (R) Windows Debugger Version 10.0.26100.1591 AMD64
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -74,7 +72,7 @@ This is the Windows Debugger REPL. To drop to Python, type .exit
 0: kd> 0: kd> 
 ```
 
-If launched with dbgmodel checked, the Model View should contain per-process/thread information in the primary 
+	If launched with dbgmodel checked, the Model View should contain per-process/thread information in the primary 
 **Processes** sub-tree.  If launched with dbgmodel off, the **Processes** tree will contain one entry at 0xf0f0f0f0 with
 one "thread" entry per processor.  The target process/thread list will reside under the **ExdiProcesses** node.
 
