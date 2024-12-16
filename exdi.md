@@ -72,30 +72,30 @@ This is the Windows Debugger REPL. To drop to Python, type .exit
 0: kd> 0: kd> 
 ```
 
-	If launched with dbgmodel checked, the Model View should contain per-process/thread information in the primary 
-	**Processes** sub-tree.  If launched with dbgmodel off, the **Processes** tree will contain one entry at 0xf0f0f0f0 
-	with one "thread" entry per processor.  The target process/thread list will reside under the **ExdiProcesses** node.
+If launched with dbgmodel checked, the Model View should contain per-process/thread information in the primary 
+**Processes** sub-tree.  If launched with dbgmodel off, the **Processes** tree will contain one entry at 0xf0f0f0f0 
+with one "thread" entry per processor.  The target process/thread list will reside under the **ExdiProcesses** node.
 
 ## Notes:
-	Setup for EXDI connections is fairly complicated and difficult to get correct. The argument string typically 
-	should be something like:
+Setup for EXDI connections is fairly complicated and difficult to get correct. The argument string typically 
+should be something like:
 ```
  exdi:CLSID={29f9906e-9dbe-4d4b-b0fb-6acf7fb6d014},Kd=Guess,DataBreaks=Exdi
 ``` 
-	The CLSID here should match the CLSID in the **exdiConfigData.xml** file in the debugger architectural directory.  
-	If windbg has been run using EXDI at some point, there will also be an entry in the System Registry for this CLSID.  
-	The InprocServer32 subentry for this CLSID in the Registry should point to a copy of ExdiGdbSrv.dll, typically the 
-	one in the same directory. This DLL must reside somewhere that the debugger has permission to load from, i.e. not 
-	in the WindowsApps directory tree. The **exdiConfigData** file should be configured for the target you're using. 
-	I'd heavily recommend using **displayCommPackets==yes**, as many of the tasks take considerable time, and this is 
-	the only indicator of progress.
+The CLSID here should match the CLSID in the **exdiConfigData.xml** file in the debugger architectural directory.  
+If windbg has been run using EXDI at some point, there will also be an entry in the System Registry for this CLSID.  
+The InprocServer32 subentry for this CLSID in the Registry should point to a copy of ExdiGdbSrv.dll, typically the 
+one in the same directory. This DLL must reside somewhere that the debugger has permission to load from, i.e. not 
+in the WindowsApps directory tree. The **exdiConfigData** file should be configured for the target you're using. 
+I'd heavily recommend using **displayCommPackets==yes**, as many of the tasks take considerable time, and this is 
+the only indicator of progress.
 
-    The **Kd=Guess** parameter causes the underlying engine to scan memory for the kernel's base address, which will 
-	probably not be provided by the gdbstub. **Kd=NtBaseAddr** is also a valid option, as is eliminating the parameter, 
-	but, currently, I have no idea how to point the configuration at a correct value. Using this option will cause the 
-	load to spin pointlessly.)  If you can, I highly recommend breaking the target near the base address (e.g. by using 
-	the windbg in non-EXDI mode simultaneously), as the search proceeds down through memory starting at the current 
-	program counter.  If the difference between the PC and the base address is large, the loading process will punt 
-	before useful values are detected. (If anyone understand how to extend this search (or knows how to set the base 
-	address to sidestep the scan), I would really love some guidance.)  Also, bear in mind, if the target is booted in 
-	non-debug mode, the search process is guaranteed to fail with the resulting reduction in available commands.
+The **Kd=Guess** parameter causes the underlying engine to scan memory for the kernel's base address, which will 
+probably not be provided by the gdbstub. **Kd=NtBaseAddr** is also a valid option, as is eliminating the parameter, 
+but, currently, I have no idea how to point the configuration at a correct value. Using this option will cause the 
+load to spin pointlessly.)  If you can, I highly recommend breaking the target near the base address (e.g. by using 
+the windbg in non-EXDI mode simultaneously), as the search proceeds down through memory starting at the current 
+program counter.  If the difference between the PC and the base address is large, the loading process will punt 
+before useful values are detected. (If anyone understand how to extend this search (or knows how to set the base 
+address to sidestep the scan), I would really love some guidance.)  Also, bear in mind, if the target is booted in 
+non-debug mode, the search process is guaranteed to fail with the resulting reduction in available commands.
