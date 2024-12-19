@@ -10,7 +10,9 @@
 - Recommended reading: **Debugging macOS Kernel using Virtual Box** (https://klue.github.io/blog/2017/04/macos_kernel_debugging_vbox/)
 - Also: **How to Convert a MacOS Installer to ISO** (https://osxdaily.com/2020/07/20/how-convert-macos-installer-iso)
 - Also: **Install macOS does not appear to be a valid OS installer application** (https://apple.stackexchange.com/questions/439402/install-macos-monterey-app-does-not-appear-to-be-a-valid-os-installer-applicatio)
+- Also: **MacOS Two-machine Kernel Debugging** (https://diverto.github.io/2022/03/06/macos-two-Machine-kernel-debugging)
 
+### Creating a macos VM
 - From terminal:
 ```
 softwareupdate --list-full-installers
@@ -23,11 +25,32 @@ hdiutil convert /tmp/Sequoia.dmg -format UDTO -o ~/Desktop/Sequoia.cdr
  mv ~/Desktop/Sequoia.cdr ~/Desktop/Sequoia.iso
 ```
 - In VMware Fusion, create new VM
-- Boot the VM and issue the command:
+
+### Loading a development version of the kernel
+- On the target, load the desired KDK.
+- With the ISO still mounted, `Power On To Firmware` to get into Recovery mode
+- On boot, select `Utilities->Terminal`
+- in the terminal:
 ```
-sudo nvram boot-args="-v debug=0x144"
+csrutil disable
+csrutil authenticated-root disable
+reboot
 ```
-- From the Ghidra toolbar, `Configure and launch <anything> using...->dbgeng-kernel`.
+- From a terminal post-reboot:
+```
+mkdir ~/rootmount
+sudo mount -o nobrowse -t aps /dev/disk1s5 ~/rootmount (assuing /dev/disk1s5s1 is (apfs, sealed, local, read-only, journaled)
+sudo ditto /Library/Developer/KDKs/<KDK Version>/System ~/rootmount/System
+sudo kmutil install -R ~/rootmount -u
+sudo bless --mount ~/rootmount -bootefi -create-snapshot
+sudo nvram boot-args="debug=0x44 kdp_match_name=en0 wdt=-1 kcsuffix=development
+sudo reboot
+```
+- On reboot, validate using `sysctl kern.osbuildconfig`;  should return `development`
+
+### Testing the debugger
+
+- From the Ghidra toolbar, `Configure and launch <anything> using...->kernel-lldb`.
 ```
 Python command: py (typically)
 Argument: exdi:CLSID={29f9906e-9dbe-4d4b-b0fb-6acf7fb6d014},Kd=Guess,DataBreaks=Exdi
