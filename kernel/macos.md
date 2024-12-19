@@ -52,7 +52,9 @@ sudo reboot
 - From a terminal:
 ```
 cd ~/Virtual\ Machines.localized/macOS\ 15.vmwarevm (or wherever your VM is stored)
+vmrun suspend macOS\ 15.vmx (or use the GUI)
 perl -i -pe 's/(?<=pendingNMI\x00{4})\x00/\x01/' macOS\ 15-5139bd76.vmss
+vmrun start macOS\ 15.vmx
 ```
 
 ### Starting the debugger
