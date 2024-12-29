@@ -46,7 +46,7 @@
   - The label for a dialog if the user needs to be queried
   - A description
 
-- For **drgn**, invoking the *drgn* command directly saves us a lot of the work involved in getting the environment correct.  We pass it our python launcher "local-drgn.py" instead of allowing it to call *run\_interactive*, which does not return.  Instead, we created an instance of *prog* based on the parameters, complete the Ghidra-specific initialization, and call *run\_interactive(prog)* ourselves.
+- For **drgn**, invoking the *drgn* command directly saves us a lot of the work involved in getting the environment correct.  We pass it our python launcher "local-drgn.py" instead of allowing it to call *run_interactive*, which does not return.  Instead, we created an instance of *prog* based on the parameters, complete the Ghidra-specific initialization, and call *run_interactive(prog)* ourselves.
 
 - The python script needs to do the setup work for Ghidra and for **drgn**. A good start is to try to implement a script that calls the methods for connect, create, and start, with create doing as little as possible initially.  This should allow you to work the kinks out of "arch.py" and "util.py".
 
@@ -60,34 +60,20 @@
 
 ### The Python files
 
-- At this point, we can start actually implementing the **drgn** agent. "Arch.py" is usually a good starting point, as much of the initial logic depends on it. For "arch.py", the hard bit is knowing what maps to what. The *language\_map* converts the debugger's self-reported architecture to Ghidra's language set. Ghidra's languages are mapped to a set of language-to-compiler maps, which are then used to map the debugger's self-reported language to Ghidra's compiler. Certain combinations are not allowed because Ghidra has no concept of that language-compiler combination.  For example, x86 languages never map to "default".  Hence, the need for a *x86\_compiler\_map*, which defaults to something else (in this case, *gcc*).
+- At this point, we can start actually implementing the **drgn** agent. **Arch.py** is usually a good starting point, as much of the initial logic depends on it. For "arch.py", the hard bit is knowing what maps to what. The *language_map* converts the debugger's self-reported architecture to Ghidra's language set. Ghidra's languages are mapped to a set of language-to-compiler maps, which are then used to map the debugger's self-reported language to Ghidra's compiler. Certain combinations are not allowed because Ghidra has no concept of that language-compiler combination.  For example, x86 languages never map to "default".  Hence, the need for a *x86_compiler_map*, which defaults to something else (in this case, *gcc*).
 
-- After "arch.py", a first pass at "util.py" is probably warranted. In particular, the version info is used early in the startup process.  A lot of this code is not relevant to our current project, but at a minimum we want to implement (or fake out) methods such as *selected\_process*, *selected\_thread*, and *selected\_frame*. In this example, there probably won't be more than one session or one process. Ultimately, we'll have to decide whether we even want *Session* in the schema. For now, we're defaulting session and process to 0, and thread to 1, as 0 is invalid for debugging the kernel. (Later, it becomes obvious that the attached pid and *prog.main_thread().tid* make sense for user-mode debugging, and *prog.crashed_thread().tid* makes sense for crash dump debugging.)
+- After "arch.py", a first pass at **util.py** is probably warranted. In particular, the version info is used early in the startup process.  A lot of this code is not relevant to our current project, but at a minimum we want to implement (or fake out) methods such as *selected_process*, *selected_thread*, and *selected_frame*. In this example, there probably won't be more than one session or one process. Ultimately, we'll have to decide whether we even want *Session* in the schema. For now, we're defaulting session and process to 0, and thread to 1, as 0 is invalid for debugging the kernel. (Later, it becomes obvious that the attached pid and *prog.main_thread().tid* make sense for user-mode debugging, and *prog.crashed_thread().tid* makes sense for crash dump debugging.)
 
-- With "arch.py" and "util.py" good to a first approximation, we would normally start implementing "put" methods for various objects in the Model View, starting at the root of the tree and descending through the children.  Again, *Session* and *Process* are rather poorly-defined, so we skip them (leaving one each) and tackle *Threads*. Typically, for each iterator in the debugger API, two commands get implemented - one that does the actual work, e.g. *put_threads()* and one that wraps this method in a (potentialy batched) transaction, e.g. *ghidra_trace_put_threads()*. The working method typically creates the path to the container using patterns for the container, individual keys, and the combination, e.g. *THREADS_PATTERN*, *THREAD_KEY_PATTERN*, and *THREAD_PATTERN*.  Patterns are built up from other patterns, going back to the root.  A trace object corresponding to the debugger object is created from the path and inserted into the trace.
+- With "arch.py" and "util.py" good to a first approximation, we would normally start implementing "put" methods in **commands.py** for various objects in the Model View, starting at the root of the tree and descending through the children. Again, *Session* and *Process* are rather poorly-defined, so we skip them (leaving one each) and tackle *Threads*. Typically, for each iterator in the debugger API, two commands get implemented - one that does the actual work, e.g. *put_threads()* and one that wraps this method in a (potentialy batched) transaction, e.g. *ghidra_trace_put_threads()*. The working method typically creates the path to the container using patterns for the container, individual keys, and the combination, e.g. *THREADS_PATTERN*, *THREAD_KEY_PATTERN*, and *THREAD_PATTERN*.  Patterns are built up from other patterns, going back to the root.  A trace object corresponding to the debugger object is created from the path and inserted into the trace.
 
-- Once this code has been tested, attributes of the object can be added to the base object using *set_value*. Attributes that are not primitives can be added either immediately using *create\_object* with extensions to the path, populated, and *insert*ed, or placeholders can be created using just the *create\_object* method
+- Once this code has been tested, attributes of the object can be added to the base object using *set_value*. Attributes that are not primitives can be added either immediately using *create_object* with extensions to the path, populated, and *insert*ed, or placeholders can be created using just the *create_object* method. The advantage to using a placeholder is that expensive methods can be postponed until the user requests that information, with the downside that *method*s must be added to populate those nodes.
+
+- Having completed a single command, we can proceed in one of two directions - we can continue implementing commands for other objects in the tree or we can implement matching "refresh* methods in **methods.py** for the completed object. "Methods.py" also requires patterns which are used to match a path to a trace object, usually via *find_x_by_pattern* methods. The *refresh* methods may or may not rely on the *find_by* methods depending on whether the matching command needs parameters.  For example, we may want to assume the *selected_thread* matches the current object in the view, in which case it can be used to locate that node, or we may want to force the method to match on the node if the trace object can be easily matched to the debugger object, or we may want to use the node to set *selected_thread*.
+
+- *Refresh* methods (and others) are often annotated in several ways.  The *@REGISTRY.method* annotation makes the method available to the GUI.  It specifies the *action* to be taken and the *display* that appears in the GUI pop-up menu. *Actions* may be purely descriptive or may correspond to built-in actions taken by the GUI, e.g. 'refresh' and many of the control methods, such as 'step_into'. Parameters for the methods maybe annotated with *sch.Schema* (on the first parameter) to indicate the nodes to which the method applies, and with *ParamDesc* to describe the parameter's type and label for pop-up dialogs. After retrieving necessary parameters, *refresh* methods invoke methods from "commands.py" wrapped in a transaction.
+
+- For *drgn*, we implemented *put*/*refresh* methods for threads, frames, registers (*putreg*), and local variables, then modules and sections, memory and regions, the environment, and finally processes.  We also implemented *putmem* using the debugger's *read* API. *Symbols* was another possibility, but, for the moment, populating symbols seemed to expensive. Instead, *retrieve_symbols* was added to allow per-pattern symbols to be added. Unfortunately, the *drgn* API doesn't support wildcards, so eventually some other strategy will be necessary.
+
+- The remaining set of python functions, **hooks.py**, comprises callbacks for various events sent by the native debugger. The current *drgn* code has no event system. A set of skeletal methods has been left in place as (a) we can use the single-step button as a stand-in for "update state", and (b) some discussion exists in the *drgn* user forums regarding eventually implementing more control functionality.
 
 
-
-
-## My Notes (as implemented)
-
-- duplicate one of the dirs in Ghidra/Debug; rename everything.
-- implement arch.py
-  - 
-- implement version info in util.py
-- implement a debugger-launcher
-  - In this case, am starting with threads, given the meaning of processes are not obvious to me at the moment. This will typically highlight errors you've made in your launcher, e.g. I forgot to add the logic to include symbols causing the thread iterator to fail.
-- implement refresh_threads
-  - Assuming put_threads works correctly, you may want to implement the matching refresh method in methods.py.  Be cognizant that, if the method is triggered from the objects tree, any error messages may not appear in the  terminal. Hovering on the object will indicate the object type which should match the annotations on the method.  If not, check the schema from the root down.
-- implement registers
-  - Keep in mind trace.put_registers expects bytes
-- implement memory
-  -- something about mapping strategy
-- something about methods with parameters, required parameters & dialog
-- something about implicit functions like refresh
-- explain the .bat/.sh syntax
-
--implement other launchers
--implement putmem_state
