@@ -10,6 +10,44 @@
 - Recommended reading: **drgn** (https://github.com/osandov/drgn)
 - Also: **drgn (docs)** (https://drgn.readthedocs.io/en/latest/)
 
+## Anatomy of a Ghidra debugger agent
+
+- Currently, the Ghidra debugger has four "agents", i.e. servers capable of receiving information from a native debugger and passing it, frequently with modifications, to the Ghidra GUI.  They include the **dbgeng** agent that supports *Windows* debuggers, the **gdb** agent for *gdb* on a variery of platforms, the **lldb** agent for *macOS* and *Linux*, and the **jpda** agent for Java.  All but the last are written in Python 3, and all communicate with the GUI via a protobuf-based protocol described in *Ghidra/Debug/Debugger-rmi-trace*.  This blurb documents the addition of a fifth agent for *Meta*'s **drgn** debugger in the hopes of highlighting issues frequently encountered when creating an agent.
+
+- At the highest level, each agent has four elements (ok, a somewhat arbitrary division, but...):
+  1. A set of launchers, often a mixture of *.bat/.sh* scripts and python
+  2. An XML schema
+  3. Python files for architecture, commands, hooks, methods, and common utility functions
+  4. Build logic
+
+- Large portions of each are identical or similar across agents, so, as a general strategy, copying an existing agent and renaming all agent-specific variables, methods, etc. is not the worst plan of action, although typically this leads to large chunks of detritus that need to be edited out late in the development process.
+
+## **Drgn** as an Example
+
+### The first launcher
+
+- For this project, we originally started duplicating the **lldb** agent and then switched to the **dbgeng** agent. Why? The hardest part of writing an agent is getting the initial launch pattern correct.  **Drgn** is itself written in python.  While gdb and lldb support python as scripting languages, their cores are not python-based. A python shell is invoked from within the *repl*. The dbgeng agent inverts this layering, i.e. we use **pybag** as the main repl and the native kd interface exposed over COM as a scripting language. **Drgn** follows this pattern.
+
+- That said, a quick look at the launchers in the dbgeng project (under "data/debugger-launchers") shows .bat files, each of which calls a python file in "data/support". As **drgn** is a Linux-only debugger, we need to convert the .bat examples to .sh. Luckily, the conversion is pretty simple: most line annotations use # in place of :: and environment variable are referenced using $VAR in place of %VAR%.
+
+- The syntax of the .sh is typical of any *nix shell. Our **drgn** launchers include:
+  - A #! line for the shell invocation
+  - The Ghidra license
+  - A #@title line for the launcher name
+  - An #@desc-annotated HTML description
+  - #@menu-group for separating launchers by type
+  - #@icon for an icon
+  - #@help pointing to a help file
+  - Some number of #@env variables referenced by the python code
+-The #@env lines are composed of:
+  - The variable name (usually in caps)
+  - colon-separated, the variable type
+  - != or = for a default value (required or not)
+  - The label for a dialog if the user needs to be queried
+  - A description
+
+- For **drgn**, invoking the "drgn" command directly saves us a lot of the work involved in getting the environment correct.  We pass it our python launcher "local-drgn.py" instead of allowing it to call "run\_interactive", which does not return.  Instead, we create an instance of "prog" based on the parameters, complete the Ghidra-specific initialization, and call "run\_interactive(prog)" ourselves.
+
 ## My Notes (as implemented)
 
 - duplicate one of the dirs in Ghidra/Debug; rename everything.
@@ -22,3 +60,15 @@
   - For this particular target, there are some interesting wrinkles surrounding the use of "sudo" (required for most targets) which complicate where wheels are stored, and surrounding the implementation of drgn.cli.\_main().  "\_main" does not return we're invoking "drgn" with a script, namely local_drgn.py, which allows us to instantiate "prog", then set up ghidra, then invoke the drgn repl.
 - implement something simple near the top of the objects tree
   - In this case, am starting with threads, given the meaning of processes are not obvious to me at the moment. This will typically highlight errors you've made in your launcher, e.g. I forgot to add the logic to include symbols causing the thread iterator to fail.
+- implement refresh_threads
+  - Assuming put_threads works correctly, you may want to implement the matching refresh method in methods.py.  Be cognizant that, if the method is triggered from the objects tree, any error messages may not appear in the  terminal. Hovering on the object will indicate the object type which should match the annotations on the method.  If not, check the schema from the root down.
+- implement registers
+  - Keep in mind trace.put_registers expects bytes
+- implement memory
+  -- something about mapping strategy
+- something about methods with parameters, required parameters & dialog
+- something about implicit functions like refresh
+- explain the .bat/.sh syntax
+
+-implement other launchers
+-implement putmem_state
