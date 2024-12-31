@@ -76,4 +76,27 @@
 
 - The remaining set of python functions, **hooks.py**, comprises callbacks for various events sent by the native debugger. The current *drgn* code has no event system. A set of skeletal methods has been left in place as (a) we can use the single-step button as a stand-in for "update state", and (b) some discussion exists in the *drgn* user forums regarding eventually implementing more control functionality.
 
+### Revisiting the schema
+
+- At this point, revisiting and editing the schema may be called for.  For example, for **drgn**, it's not obvious that there can ever be more than one session, so it may be cleaner to embed *Processes* at the root. This, in turn, requires editing the "commands.py" and "methods.py" patterns. Similarly, as breakpoints are supported, the breakpoint-related entries may safely be deleted.
+
+- In general, the schema can be structured however you like, but there are several details worth mentioning. Interfaces generally need to be respected for various functions in the GUI to work. Process, thread, frame, module, section, and memory elements can be named arbitraily, but their interfaces must be named correctly.  Additionally, the logic for finding elements in the tree is quite complicated. Elements to be traversed as part of the default search process must be tagged *canonical* and containers should have the interface *Aggregate*. 
+
+- Each entry may have *elements* of the same type are ordered by keys, and *attributes* of arbitrary type. The *element* entry describes the schema for all elements; the schema for attributes may be given explicit using name *attribute* entries or defaulted using the unnamed *attribute* entry, typically *<attribute schema="VOID">* or *<attribute schema="ANY">*. The schema for any element in the Model View is visible using the hover, which helps substantially when trying to identify schema traversal errors.
+
+- Schema entries may be marked *hidden=yes* with the obvious result. Additionally, certain attribute names and schema have special properties.  For example, *_display* defined the visible ID for an entry in the Model tree, and *ADDRESS* and *RANGE* mark attributes which are navigable.
+
+
+### Unit tests 
+
+### Documentation
+
+### Extended features
+
+ 
+
+
+
+
+
 
