@@ -15,10 +15,10 @@
 - Currently, the Ghidra debugger has four "agents", i.e. servers capable of receiving information from a native debugger and passing it, frequently with modifications, to the Ghidra GUI.  They include the **dbgeng** agent that supports *Windows* debuggers, the **gdb** agent for *gdb* on a variery of platforms, the **lldb** agent for *macOS* and *Linux*, and the **jpda** agent for Java.  All but the last are written in Python 3, and all communicate with the GUI via a *protobuf*-based protocol described in *Ghidra/Debug/Debugger-rmi-trace*.  This blurb documents the addition of a fifth agent for *Meta*'s **drgn** debugger in the hopes of highlighting issues frequently encountered when creating an agent.
 
 - At the highest level, each agent has four elements (ok, a somewhat arbitrary division, but...):
-1. A set of launchers, often a mixture of *.bat/.sh* scripts and python
-2. An XML schema
-3. Python files for architecture, commands, hooks, methods, and common utility functions
-4. Build logic
+  - A set of launchers, often a mixture of *.bat/.sh* scripts and python
+  - An XML schema
+  - Python files for architecture, commands, hooks, methods, and common utility functions
+  - Build logic
 
 - Large portions of each are identical or similar across agents, so, as a general strategy, copying an existing agent and renaming all agent-specific variables, methods, etc. is not the worst plan of action, although typically this leads to large chunks of detritus that need to be edited out late in the development process.
 
