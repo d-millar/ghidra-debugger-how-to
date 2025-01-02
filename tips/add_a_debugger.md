@@ -89,9 +89,19 @@
 
 ### Unit tests 
 
+- The hardest part of writing unit tests is almost always getting the first test to run. For **drgn**, as before, we're using **dbgeng** as the pattern, but several elements had to be changed.  Because the launchers execute a script, we need to amend the *runThrowError* logic (and, more specifically, the *execInPython* logic) in "AbstractDrgnTraceRmiTest" with a ProcessBuilder call that takes a script, rather than writing the script to stdin. While there, we can also trim out the unnecessary helper logic around items like breakpoints, watchpoints, etc. from all of the test classes.
+
+- JUnits for "method.py" follow a similar pattern, but, again, getting the first one to run is often the most difficult. For **drgn**, like the Java debugger, we've had to override the timeouts in *waitForPass* and *waitForCondition*.  After starting with hardcoded paths for the test target, we also had to add logic to re-write the *PREAMBLE* on-the-fly in *execInDrgn*. Obviously, with no real *hooks.py* logic, there's no need for *DrgnHooksTest".
+
 ### Documentation
 
+- The principal piece of documentation for all new debuggers is a description of the launchers.  Right now, the "TraceRmiLauncherServicePlugin.html" file in *Debug/Debugger* contains all of this logic.  Detail to note: the *@help* locations
+in the launchers themselves ought to match the HTML tags in the file, as should the launcher names.
+
 ### Extended features
+
+- Once everything else is done, it may be worth considering additional functionality specific to the debugger. This can be made available in either "commands.py" or "methods.py".  For *drgn*, we've added *attach* methods that allow the user to spawn additional programs.
+
 
  
 
