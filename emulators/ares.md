@@ -8,7 +8,7 @@
 ## Set-up
 
 - Discussion: **Problems Getting The Debugger To Work With Nintendo 64** (https://github.com/NationalSecurityAgency/ghidra/discussions/6787)
-- To launch your target: `.ares` then load target.v64.
+- To launch your target: `./ares` then load target.v64.
 - From the Ghidra toolbar, `Configure and launch target.gba using...->remote gdb`.
 ```
 Host: localhost
