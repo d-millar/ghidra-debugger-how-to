@@ -14,6 +14,7 @@
 - Download or build and install `pybind`.
 - Download or build the latest `pyttd.pyd`, making sure the version of Python you intend to use is reflected in the `TTD.sln`.
 - Copy `TTDReplay.dll` and `TTDReplayCPU.dll` from the Windbg2 `ttd` directory, the Window Kits `x64\ttd` directory, or some preferably un-system-protected equivalent into the `site-packages\pyttd` directory for the matching version of Python.  (Should have an empty `__init__.py`, `pyttd.pyd`, and the two `TTD` dll's.
+- Generate a trace file using `ghidradbg` or `windbg` (in this case `target.exe`->`target.run`).
 
 ### Starting the debugger
 
