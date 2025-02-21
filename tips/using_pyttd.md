@@ -13,7 +13,7 @@
 ### Getting started
 - Download or build and install `pybind`.
 - Download or build the latest `pyttd.pyd`, making sure the version of Python you intend to use is reflected in the `TTD.sln`.
-- Copy `TTDReplay.dll` and `TTDReplayCPU.dll` from WindbgPreview `ttd` directory or Window Kits or equivalent into the `site-packages/pyttd` directory for the matching version of Python.  (Should have `__init__.py`, `pyttd.pyd`, and the two TTD DLLs.
+- Copy `TTDReplay.dll` and `TTDReplayCPU.dll` from WindbgPreview `ttd` directory or Window Kits `x64\ttd` directory or an equivalent into the `site-packages\pyttd` directory for the matching version of Python.  (Should have an empty `__init__.py`, `pyttd.pyd`, and the two TTD DLLs.
 
 ### Starting the debugger
 
