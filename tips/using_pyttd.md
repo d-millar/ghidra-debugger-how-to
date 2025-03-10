@@ -1,4 +1,4 @@
-# using pyttd (DEPRECATED - replaced by dbgneng-trace)
+# using pyttd (DEPRECATED - replaced by dbgeng-trace)
 
 ## Context
 - OS: Windows
