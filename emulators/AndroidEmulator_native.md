@@ -19,7 +19,7 @@
 	- `platform select remote-android` (gives the "Connected: no" message)
 	- `platform connect connect://emulator-5554:54321`
 	- `file target`; `b main`; `r`
-- From the Ghidra toolbar, `Configure and launch target using... -> android gdb` 
+- From the Ghidra toolbar, `Configure and launch target using... -> android lldb` 
 ```
 Image: /data/local/tmp/target (this probably will require at least a path modification)
 Argument: 
